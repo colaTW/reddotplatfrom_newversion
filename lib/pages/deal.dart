@@ -168,38 +168,7 @@ class _deal extends State<deal> {
                     //   Navigator.push(context, MaterialPageRoute(builder: (context) => deal_way(data:go)));
                     // }
                     //     ,) ,
-                  Visibility(
-                      visible:_visible,
-                      child:
-                    Row(
-                      children: <Widget>[
-                        ElevatedButton(
-                            onPressed: () {
-                              DatePicker.showDateTimePicker(context,
-                                  showTitleActions: true,
-                                  minTime: DateTime(2019, 3, 5),
-                                  maxTime: DateTime(2200, 6, 7),
-                                  onChanged: (date) {
-                                    print('change $date');
-                                  },
-                                  onConfirm: (date) {
-                                    setState(() {
-                                     // this.startTime = date;
 
-                                    });
-                                  },
-                                  currentTime: DateTime.now(),
-                                  locale: LocaleType.zh);
-                            },
-                            child: Text(
-                              '選擇日期',
-                              style: TextStyle(color: Colors.blue),
-                            )),
-                        Expanded(
-                         // child: Text((formatter.format(startTime)).toString(), style: TextStyle(color: Colors.white)),
-                        )
-                      ],
-                    )),
                     Row(
                       children: <Widget>[
                         Theme(
@@ -325,13 +294,11 @@ class _deal extends State<deal> {
                         Image.asset('assets/images/memberlogin/bt003.png'),
                         onPressed: () async {
                           var go = await (APIs().read('how'));
-                          var get = json.decode(await APIs().getlist_employee(widget.data['tk'], 0, 0,0,1));
-                          get=get['projectHandlerTypes'];
-                          print(go);
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => deal_how(data:{'go':go,'HandlerTypes':get})));
+                                  builder: (context) => deal_how(data:{'go':go,'projectHandlerTypes':widget.data['projectHandlerTypes']})));
                         },
                         iconSize: 100,
                       )),
@@ -352,35 +319,12 @@ class _deal extends State<deal> {
   }
 
   void showEnd(BuildContext context, var show) {
-//    showDialog(
-//        context: context,
-//        builder: (context) {
-//          return new AlertDialog(
-//            title: new Text("結果"),
-//            content: Text(show.toString()),
-//            actions: <Widget>[
-//              new FlatButton(
-//                onPressed: () {
-//                  int count = 0;
-//                  Navigator.of(context, rootNavigator: true).pop();
-//                  Navigator.of(context, rootNavigator: true).pop();
-//                },
-//                child: new Text("確認"),
-//              ),
-//            ],
-//          );
-//        });
     Alert(
         title: '結果',
         context: context,
-        type: AlertType.success,
-        desc: "成功",
-        buttons: [
-          DialogButton(onPressed: (){
-          Navigator.of(context,rootNavigator: true).pop();
-          Navigator.pop(context,'test');
-          }, child: Text(show))
-        ]
+        type: AlertType.warning,
+        desc: show,
+
     ).show();
   }
 
@@ -407,9 +351,9 @@ class _deal extends State<deal> {
         var info = Map<String, dynamic>();
         info['projectId'] = widget.data['NO'].toString();
         info['message'] = await (APIs().read_string('message'));
-        if(way==2){way=0;}
+        if(way!=1){way=0;}
         info['onSite'] = way.toString();
-        //info['onSiteAt'] = (formatter.format(startTime)).toString();
+        info['onSiteAt'] = "2022-12-22 11:23";
         if (await APIs().read_string('price') == '') {
           info['price'] = '0';
         }
@@ -419,13 +363,14 @@ class _deal extends State<deal> {
 
         info['handlerType'] = await (APIs().read('how'));
         info['handlerUserId'] = widget.data['ID'].toString();
-        info['images'] = [
-          await (APIs().read_string('img1_id')),
-          await (APIs().read_string('img2_id')),
-          await (APIs().read_string('img3_id')),
-          await (APIs().read_string('img4_id')),
-          await (APIs().read_string('img5_id'))
-        ];
+        var images=[];
+        if(await (APIs().read_string('img1_id'))!="")images.add(APIs().read_string('img1_id'));
+        if(await (APIs().read_string('img2_id'))!="")images.add(APIs().read_string('img2_id'));
+        if(await (APIs().read_string('img3_id'))!="")images.add(APIs().read_string('img3_id'));
+        if(await (APIs().read_string('img4_id'))!="")images.add(APIs().read_string('img4_id'));
+        if(await (APIs().read_string('img5_id'))!="")images.add(APIs().read_string('img5_id'));
+
+        info['images'] = images;
         var file = [];
         for (var i = 0; i < deal.filelist.length; i++) {
           if ((i % 2) == 0) {
@@ -436,7 +381,7 @@ class _deal extends State<deal> {
         print(info.toString());
 
         var end = json.decode(await APIs().newdeal(widget.data['tk'], info));
-        if (end['data']['errors'] == "") {
+        if (end['data']['code'] == 0) {
           final prefs = await SharedPreferences.getInstance();
           prefs.remove('how');
           prefs.remove('img1');
@@ -452,10 +397,20 @@ class _deal extends State<deal> {
           deal.filelist.clear();
           prefs.remove('message');
           prefs.remove('price');
-
-          showEnd(context, '確認');
+          Alert(
+              title: '提示',
+              context: context,
+              type: AlertType.success,
+              desc: "成功",
+              buttons: [
+                DialogButton(onPressed: (){
+                  Navigator.of(context,rootNavigator: true).pop();
+                  Navigator.pop(context,'test');
+                }, child: Text('確認'))
+              ]
+          ).show();
         } else {
-          showEnd(context, end['data']['errors']);
+          showEnd(context, end['data']['message']);
         }
       }
     }
@@ -505,9 +460,9 @@ class _deal extends State<deal> {
               String base64file = base64Encode(file_64);
               if(filetype=="doc"||filetype=="xls"||filetype=="pdf"){
                 var re = json.decode(
-                    await APIs().uploadfile(
+                    await APIs().uploadfile_handler(
                         widget.data['tk'], filename,filetype, base64file));
-                if (re['data']['errors'] == '') {
+                if (re['data']['code'] == 0) {
                   file1_id = re['data']['handlerFileId'].toString();
                   _filepath = filename;
                   await deal.filelist.add(file1_id);
@@ -526,7 +481,7 @@ class _deal extends State<deal> {
                     context: context,
                     type: AlertType.warning,
                     title: "提示",
-                    desc: re['data']['errors'],
+                    desc: re['data']['message'],
                     buttons: [
                     ],
                   ).show();

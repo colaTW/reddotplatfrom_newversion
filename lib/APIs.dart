@@ -13,21 +13,13 @@ class APIs {
     url=(prefs.getString("DomainIP")??"");
     return url;
   }
+  //login&register
   login_manage(String ac,String pas) async{
     var params = Map<String, String>();
     params["account"] = ac;
     params["password"] = pas;print(params);
     var client = http.Client();
     var uri = Uri.https(url,'/api/manager/user/login');
-    var response = await client.post(uri, body: params,);
-    return (response.body);
-  }
-  login(String ac,String pas) async{
-    var params = Map<String, String>();
-    params["account"] = ac;
-    params["password"] = pas;print(params);
-    var client = http.Client();
-    var uri = Uri.https(url,'/api/v1/user-login');
     var response = await client.post(uri, body: params,);
     return (response.body);
   }
@@ -40,25 +32,37 @@ class APIs {
     var body=json.encode(params);
     var client = http.Client();
     print(body);
-    var uri = Uri.https(url,'/api/v1/client-login');
+    var uri = Uri.https(url,'/api/member/user/login');
     var response = await client.post(uri, body: body,headers:header);
     print(response.body);
     return (response.body);
   }
-  register_member(String ac,String pas) async{
+  register_member(String constructionId,String name,String account,String password,String confirmPassword,String mobile,String email) async{
     var params = Map<String, String>();
     var header = Map<String, String>();
     header["Content-Type"]="application/json";
-    params["account"] = ac;
-    params["password"] = pas;print(params);
+    params["constructionId"] = constructionId;
+    params["name"] = name;
+    params["account"] = account;
+    params["password"] = password;
+    params["confirmPassword"] = confirmPassword;
+    params["mobile"] = mobile;
+    params["email"] = email;
     var body=json.encode(params);
     var client = http.Client();
-    print(body);
     var uri = Uri.https(url,'/api/member/user/register');
     var response = await client.post(uri, body: body,headers:header);
     print(response.body);
     return (response.body);
   }
+  getID_construction(var code)async{
+    var uri = Uri.https(url,'/api/member/construction/code/'+code);
+    print(uri);
+    var client = http.Client();
+    var response = await client.get(uri);
+    return (response.body);
+  }
+  //construction's API
   getlist_construction(String token,var name,var code,int pages)async{
     var params = Map<String, String>();
     var body= Map<String, String>();
@@ -118,6 +122,18 @@ class APIs {
     var response = await client.delete(uri,headers:params);
     return (response.body);
   }
+  getcategoryitem_member(String token,)async{
+    var params = Map<String, String>();
+    var body= Map<String, String>();
+    params["Authorization"] = ":Bearer "+token;
+    //params["Content-Type"]="application/json";
+    var uri = Uri.https(url,'/api/member/project/category/item/options',body);
+    print(body);
+    var client = http.Client();
+    var response = await client.get(uri,headers:params);
+    // print(response.body);
+    return (response.body);
+  }
   getlist_employee(String token,var type,var Category,var items,int pages)async{
     var params = Map<String, String>();
     var body= Map<String, String>();
@@ -142,14 +158,25 @@ class APIs {
     var body= Map<String, String>();
     body["projectHandlerType"]=type.toString();
     body['page']=pages.toString();
-    if(Category!=null){body['projectCategoryId']=Category.toString();}
+    body['limit']="5";
+
+    if(Category!=0){body['projectCategoryId']=Category.toString();}
     if(items!=null){body['projectItemId']=items.toString();}
-    else{body['projectItemId']='0';}
+    params["Authorization"] = ":Bearer "+token;
+    params["Content-Type"]="application/json";
+    var uri = Uri.https(url,'/api/member/project/one',body);
+    print(body);
+    var client = http.Client();
+    var response = await client.get(uri,headers:params);
+    // print(response.body);
+    return (response.body);
+  }
+  getinfo_member(String token)async{
+    var params = Map<String, String>();
+    var body= Map<String, String>();
     params["Authorization"] = ":Bearer "+token;
     //params["Content-Type"]="application/json";
-    var uri = Uri.https(url,'/api/v1/client/projects/main/list',body);
-    print(body);
-
+    var uri = Uri.https(url,'/api/member/user/profile',);
     var client = http.Client();
     var response = await client.get(uri,headers:params);
     // print(response.body);
@@ -174,8 +201,9 @@ class APIs {
     var client = http.Client();
     var body=json.encode(info);
     print(body);
-    var uri = Uri.https(url,'/api/v1/projects/handler/one');
+    var uri = Uri.https(url,'/api/member/project/handler/one');
     var response = await client.post(uri,headers:params,body:body);
+    print(response.body);
     return (response.body);
   }
   uploadimg(String token,var name,var img)async{
@@ -185,13 +213,13 @@ class APIs {
     body['fileName']=name.toString();
     body['file']="data:image/jpeg;base64,"+img;
     var client = http.Client();
-    var uri = Uri.https(url,'/api/v1/projects/handler/image/one');
+    var uri = Uri.https(url,'/api/member/project/handler/one');
     var response = await client.post(uri,headers:params,body:body);
     print("body"+response.body);
     return (response.body);
 
   }
-  uploadfile(String token,var filename,var filetype,var filepath)async{
+  uploadfile_handler(String token,var filename,var filetype,var filepath)async{
     var params = Map<String, String>();
     params["Authorization"] = ":Bearer "+token;
     var body= Map<String, String>();
@@ -205,8 +233,9 @@ class APIs {
     else if(filetype=="pdf"){
       body['file']="data:@file/pdf;base64,"+filepath;
     }
+    print(body['file']);
     var client = http.Client();
-    var uri = Uri.https(url,'/api/v1/projects/handler/file/one');
+    var uri = Uri.https(url,'/api/member/project/handler/file/one');
     var response = await client.post(uri,headers:params,body:body);
     print("body"+response.body);
     return (response.body);
@@ -228,23 +257,35 @@ class APIs {
     var client = http.Client();
     var body=json.encode(info);
     print(body);
-    var uri = Uri.https(url,'/api/v1/projects/main/one/client');
+    var uri = Uri.https(url,'/api/member/project/one');
     var response = await client.post(uri,body:body,headers:params);
     print("here"+response.body);
     return (response.body);
   }
-  uploadimg_no(var img,var name)async{
+  uploadimg_handler(String tk,var img,var name)async{
     var params = Map<String, String>();
     var body= Map<String, String>();
     body['fileName']=name.toString();
     body['file']="data:image/jpeg;base64,"+img;
+    params["Authorization"] = ":Bearer "+tk;
+    var client = http.Client();
+    var uri = Uri.https(url,'/api/member/project/handler/image/one');
+    var response = await client.post(uri,headers:params,body:body);
+    return (response.body);
+  }
+  uploadimg_project(String tk,var img,var name)async{
+    var params = Map<String, String>();
+    var body= Map<String, String>();
+    body['fileName']=name.toString();
+    body['file']="data:image/jpeg;base64,"+img;
+    params["Authorization"] = ":Bearer "+tk;
+
     print(body);
     var client = http.Client();
-    var uri = Uri.https(url,'/api/v1/projects/main/image/one');
+    var uri = Uri.https(url,'/api/member/project/image/one');
     var response = await client.post(uri,headers:params,body:body);
     print("body"+response.body);
     return (response.body);
-
   }
   sign(var tk,var handler,var img)async{
     var params = Map<String, String>();

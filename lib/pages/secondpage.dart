@@ -13,9 +13,9 @@ class secondpage extends StatelessWidget {
   TextEditingController password = TextEditingController();
   var isDisable=false;
 
-
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
 
       appBar: AppBar(
@@ -80,21 +80,19 @@ class secondpage extends StatelessWidget {
                 }
                 else {
                   String login_info;
-                  login_info = await APIs().login(
-                      'admin', 'admin123'); //getData()延遲執行後賦值給data
+                  login_info = await APIs().login_member( login.text, password.text); //getData()延遲執行後賦值給data
                   var info = json.decode(login_info);
 
                   // print(info['data']['token']);
-                  if (info['status'] == 'success') {
+                  if (info['code'] == 0) {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) =>Employee(
                             data: {
-                              'tk': info['data']['token'],
-                              'ID': info['data']['user_id']
+                              'tk': info['token'],
                             })));
                   }
                   else {
-                    loginfailDialog(context);
+                    loginfailDialog(context,info['message']);
                   }
                 }
                   }
@@ -106,13 +104,13 @@ class secondpage extends StatelessWidget {
       ))),
     );
   }
-  void loginfailDialog(BuildContext context) {
+  void loginfailDialog(BuildContext context,String message) {
     showDialog(
         context: context,
         barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Text('登入失敗'),
+            content: Text('登入失敗:'+message),
             title: Center(
                 child: Text(
                   '登入訊息',

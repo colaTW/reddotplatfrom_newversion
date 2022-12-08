@@ -195,10 +195,9 @@ class _deal_img extends State<deal_img> {
         var filename = name[name.length - 1];
         List<int> imageBytes = image.readAsBytesSync();
         String base64Image = base64Encode(imageBytes);
-        var re = json.decode(await APIs().uploadimg(widget.data['tk'],filename,base64Image));
-        print(re['data']);
+        var re = json.decode(await APIs().uploadimg_handler(widget.data['tk'],base64Image,filename));
         if (img1Path == '') {
-          if (re['data']['errors'] == "") { 
+          if (re['data']['code'] == 0) {
             img1id = re['data']['handlerFileId'].toString();
             setState(() {
               img1Path = re['data']['handlerFileUrl'];
@@ -207,7 +206,7 @@ class _deal_img extends State<deal_img> {
           }
         }
         else if (img2Path == '') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img2id = re['data']['handlerFileId'].toString();
             setState(() {
               img2Path = re['data']['handlerFileUrl'];
@@ -216,7 +215,7 @@ class _deal_img extends State<deal_img> {
           }
         }
         else if (img3Path == '') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img3id = re['data']['handlerFileId'].toString();
             setState(() {
               img3Path = re['data']['handlerFileUrl'];
@@ -225,7 +224,7 @@ class _deal_img extends State<deal_img> {
           }
         }
         else if (img4Path == '') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img4id = re['data']['handlerFileId'].toString();
             setState(() {
               img4Path = re['data']['handlerFileUrl'];
@@ -233,7 +232,7 @@ class _deal_img extends State<deal_img> {
             });
           }
         } else if (img5Path == '') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img5id = re['data']['handlerFileId'].toString();
             setState(() {
               img5Path = re['data']['handlerFileUrl'];
@@ -269,10 +268,10 @@ class _deal_img extends State<deal_img> {
         var filename = name[name.length - 1];
         List<int> imageBytes = image.readAsBytesSync();
         String base64Image = base64Encode(imageBytes);
-        var re = json.decode(await APIs().uploadimg(widget.data['tk'], filename,base64Image));
+        var re = json.decode(await APIs().uploadimg_handler(widget.data['tk'],base64Image, filename));
 
         if (img1Path == '') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img1id = re['data']['handlerFileId'].toString();
             setState(() {
               img1Path = re['data']['handlerFileUrl'];
@@ -281,7 +280,7 @@ class _deal_img extends State<deal_img> {
           }
         }
         else if (img2Path == '') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img2id = re['data']['handlerFileId'].toString();
             setState(() {
               img2Path = re['data']['handlerFileUrl'];
@@ -290,7 +289,7 @@ class _deal_img extends State<deal_img> {
           }
         }
         else if (img3Path == '') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img3id = re['data']['handlerFileId'].toString();
             setState(() {
               img3Path = re['data']['handlerFileUrl'];
@@ -299,7 +298,7 @@ class _deal_img extends State<deal_img> {
           }
         }
         else if (img4Path =='') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img4id = re['data']['handlerFileId'].toString();
             setState(() {
               img4Path = re['data']['handlerFileUrl'];
@@ -308,7 +307,7 @@ class _deal_img extends State<deal_img> {
           }
         }
         else if (img5Path == '') {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img5id = re['data']['handlerFileId'].toString();
             setState(() {
               img5Path = re['data']['handlerFileUrl'];
@@ -326,171 +325,6 @@ class _deal_img extends State<deal_img> {
       }
     }
   }
-  /*_openGallery1() async {
-    if(await APIs().isNetWorkAvailable()==0){
-      Fluttertoast.showToast(
-        msg: "請連接WIFI或使用行動網路",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
 
-      );
-    }
-    else {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      setState(() {
-        gif1 = 'assets/images/cupertino.gif';
-      });
-      if (image != null) {
-        List<int> imageBytes = image.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        var re = json.decode(
-            await APIs().uploadimg(widget.data['tk'], base64Image));
-        print(re['data']);
-        if (re['data']['errors'] == "") {
-          img1_id = re['data']['handlerFileId'].toString();
-          setState(() {
-            img1 = re['data']['handlerFileUrl'];
-          });
-        }
-      }
-      else {
-        setState(() {
-          gif1 = 'assets/images/memberlogin/uploadimg.png';
-        });
-      }
-    }
-  }
-  _openGallery2() async {
-    if(await APIs().isNetWorkAvailable()==0){
-      Fluttertoast.showToast(
-        msg: "請連接WIFI或使用行動網路",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-
-      );
-    }
-    else {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      setState(() {
-        gif2 = 'assets/images/cupertino.gif';
-      });
-      if (image != null) {
-        List<int> imageBytes = image.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        var re = json.decode(
-            await APIs().uploadimg(widget.data['tk'], base64Image));
-        if (re['data']['errors'] == "") {
-          img2_id = re['data']['handlerFileId'].toString();
-          setState(() {
-            img2 = re['data']['handlerFileUrl'];
-          });
-        }
-      }
-      else {
-        setState(() {
-          gif2 = 'assets/images/memberlogin/uploadimg.png';
-        });
-      }
-    }
-  }
-  _openGallery3() async {
-    if(await APIs().isNetWorkAvailable()==0){
-      Fluttertoast.showToast(
-        msg: "請連接WIFI或使用行動網路",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-
-      );
-    }
-    else {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      setState(() {
-        gif3 = 'assets/images/cupertino.gif';
-      });
-      if (image != null) {
-        List<int> imageBytes = image.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        var re = json.decode(
-            await APIs().uploadimg(widget.data['tk'], base64Image));
-        if (re['data']['errors'] == "") {
-          img3_id = re['data']['handlerFileId'].toString();
-          setState(() {
-            img3 = re['data']['handlerFileUrl'];
-          });
-        }
-      }
-      else {
-        setState(() {
-          gif3 = 'assets/images/memberlogin/uploadimg.png';
-        });
-      }
-    }
-  }
-  _openGallery4() async {
-    if(await APIs().isNetWorkAvailable()==0){
-      Fluttertoast.showToast(
-        msg: "請連接WIFI或使用行動網路",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-
-      );
-    }
-    else {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      setState(() {
-        gif4 = 'assets/images/cupertino.gif';
-      });
-      if (image != null) {
-        List<int> imageBytes = image.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        var re = json.decode(
-            await APIs().uploadimg(widget.data['tk'], base64Image));
-        if (re['data']['errors'] == "") {
-          img4_id = re['data']['handlerFileId'].toString();
-          setState(() {
-            img4 = re['data']['handlerFileUrl'];
-          });
-        }
-      }
-      else {
-        setState(() {
-          gif4 = 'assets/images/memberlogin/uploadimg.png';
-        });
-      }
-    }
-  }
-  _openGallery5() async {
-    if(await APIs().isNetWorkAvailable()==0){
-      Fluttertoast.showToast(
-        msg: "請連接WIFI或使用行動網路",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-
-      );
-    }
-    else {
-      var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-      setState(() {
-        gif5 = 'assets/images/cupertino.gif';
-      });
-      if (image != null) {
-        List<int> imageBytes = image.readAsBytesSync();
-        String base64Image = base64Encode(imageBytes);
-        var re = json.decode(
-            await APIs().uploadimg(widget.data['tk'], base64Image));
-        if (re['data']['errors'] == "") {
-          img5_id = re['data']['handlerFileId'].toString();
-          setState(() {
-            img5 = re['data']['handlerFileUrl'];
-          });
-        }
-      }
-      else {
-        setState(() {
-          gif5 = 'assets/images/memberlogin/uploadimg.png';
-        });
-      }
-    }
-  }*/
 
 }

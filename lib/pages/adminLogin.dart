@@ -14,10 +14,7 @@ class adminLogin extends StatelessWidget {
   var isDisable=false;
   @override
   Widget build(BuildContext context) {
-    login.text="admin";
-    password.text="123123";
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: Color(0xFF445154),
         title: Text("Login"),

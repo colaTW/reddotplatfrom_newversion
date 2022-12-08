@@ -34,9 +34,10 @@ class _deal_how extends State<deal_how> {
   @override
   void initState() {
     super.initState();
+    print(widget.data['projectHandlerTypes']);
  setState(() {
   how=int.parse(widget.data['go']);
-  HandlerTypes=widget.data['HandlerTypes'];
+  HandlerTypes=widget.data['projectHandlerTypes'];
  });
 
   }

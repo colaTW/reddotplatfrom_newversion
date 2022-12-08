@@ -16,7 +16,7 @@ import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import 'package:reddotplatfrom_newversion/pages/demo_Fix.dart';
+import 'package:reddotplatfrom_newversion/pages/member_newFix.dart';
 
 
 
@@ -49,6 +49,7 @@ class _Employee extends State<Employee>{
   int how;
   var items = <ItemInfo>[];
   List<Widget> itemsData = [];
+  var member_info;
   void initState() {
     this.getlist(0);
 
@@ -64,7 +65,9 @@ class _Employee extends State<Employee>{
       );
     }
     else {
-      var re = json.decode(await APIs().getlist_employee(widget.data['tk'], type, Category,ItemID,pagecounter));
+      var re = json.decode(await APIs().getlist_member(widget.data['tk'], type, Category,ItemID,pagecounter));
+      member_info=json.decode(await APIs().getinfo_member(widget.data['tk']));
+      print(re.toString());
       Categories=re['projectCategories'];
       Itmes=re['projectItems'];
       HandlerTypes=re['projectHandlerTypes'];
@@ -72,6 +75,7 @@ class _Employee extends State<Employee>{
         Itmes[i.toString()]=Itmes[i.toString()];
       }
       var go = <ItemInfo>[];
+      print(re['projectLists']);
       for (int i = 0; i < re['projectLists'].length; i++) {
         print( re['projectLists'][i]['createdAt']);
         var goinfo = ItemInfo();
@@ -84,7 +88,7 @@ class _Employee extends State<Employee>{
         goinfo.deal_type_newdate = re['projectLists'][i]['projectItemName'] +
             re['projectLists'][i]['projectCategoryName'] + '\n' +
             re['projectLists'][i]['createdAt'];
-        goinfo.deal_info_case = re['projectLists'][i]['client']['name'] + '\n' +
+        goinfo.deal_info_case = re['projectLists'][i]['member']['name'] + '\n' +
             re['projectLists'][i]['constructionName'];
         goinfo.deal_phone = re['projectLists'][i]['repair']['mobile'];
         goinfo.deal_status = re['projectLists'][i]['handlerType'];
@@ -195,7 +199,7 @@ class _Employee extends State<Employee>{
                       :ElevatedButton(child: Text('新增處理'),onPressed:() async{
                     String resultData =  await Navigator.push(context,
                         MaterialPageRoute(builder:(BuildContext context) {
-                          return deal(data:{'NO':list[i].deal_no,'tk':widget.data['tk'],'ID':widget.data['ID']}) ;
+                          return deal(data:{'NO':list[i].deal_no,'tk':widget.data['tk'],'ID':widget.data['ID'],'projectHandlerTypes':HandlerTypes}) ;
                         })
                     );
                     if(resultData!=null){
@@ -208,9 +212,9 @@ class _Employee extends State<Employee>{
                     }
                     },
                   ),
-                  list[i].deal_status=='案件結案'||list[i].deal_status=='業外處理'||list[i].deal_status=='會員自行處理'?ElevatedButton(child: Text('行事曆'),):
+                 /* list[i].deal_status=='案件結案'||list[i].deal_status=='業外處理'||list[i].deal_status=='會員自行處理'?ElevatedButton(child: Text('行事曆'),):
                   ElevatedButton(child: Text('行事曆'),onPressed:() {
-                    },),
+                    },),*/
                 ],)
               ],
             ),
@@ -267,7 +271,6 @@ class _Employee extends State<Employee>{
                               EdgeInsets.fromLTRB(20.0, 10, 28.0, 0),
                               child: Image.asset(
                                   'assets/images/memberlogin/listlogo.png'))),
-
                     ],
                   ),
 
@@ -354,20 +357,23 @@ class _Employee extends State<Employee>{
                   child: Image.asset(
                       'assets/images/mainten_create/fixbutton.png'),
                   onTap: () async {
-                    await Navigator.push(
+                    String resultData = await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                demo_Fix(data: {
+                                member_newFix(data: {
                                   'info': widget.data['info'],
                                   'tk': widget.data['tk'],
                                   'Categories':Categories,
                                   'Items':Itmes,
+                                  'memberinfo':member_info
                                 })));
-                    //Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
-                  }),
+                    if(resultData!=null){
+                      print('ok');
+                      itemsData=[];
+                      getlist(0);
+                    }                  }),
               Expanded(child:
-
                       new NotificationListener(
                           onNotification: dataNotification,
                           child:
@@ -523,10 +529,11 @@ void showMyMaterialDialog(BuildContext context,var show) {
   final size = MediaQuery.of(context).size;
   final width = size.width;
   final height = size.height;
+  print(show);
   showDialog(
       context: context,
       builder: (context) {
-        return new AlertDialog(
+        return AlertDialog(
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -554,9 +561,9 @@ void showMyMaterialDialog(BuildContext context,var show) {
                 _call(show.deal_phone);
               },child:new Text(show.deal_phone,style:TextStyle(height: 1.5,color: Colors.blue))),
               SizedBox(height: 15,),
-              show.building==null?Text(""): new Text('所屬建案:\n'+show.building,style:TextStyle(height: 1.5)),
+              show.building==null?Text(""): Text('所屬建案:\n'+show.building,style:TextStyle(height: 1.5)),
               SizedBox(height: 15,),
-              show.buildinfo==null?Text(""): new Text('建案門牌:\n'+show.buildinfo,style:TextStyle(height: 1.5)),
+              show.deal_address==null?Text(""): new Text('建案門牌:\n'+show.deal_address,style:TextStyle(height: 1.5)),
               SizedBox(height: 15,),
               /*new Text('地址:\n'+show.deal_address,style:TextStyle(height: 1.5)),
               SizedBox(height: 15,),*/

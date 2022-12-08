@@ -10,15 +10,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 
 
-class demo_Fix extends StatefulWidget {
+class member_newFix extends StatefulWidget {
   dynamic data;
-  demo_Fix({this.data});
+  member_newFix({this.data});
   @override
   State<StatefulWidget> createState() {
-    return _demo_Fix();
+    return _member_newFix();
   }
 }
-class _demo_Fix extends State<demo_Fix> {
+class _member_newFix extends State<member_newFix> {
   TextEditingController name = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController cases = TextEditingController();
@@ -47,12 +47,11 @@ class _demo_Fix extends State<demo_Fix> {
   @override
   void initState() {
     super.initState();
-    name.text="長虹建設-中原段";
   }
 
   @override
   Widget build(BuildContext context) {
-
+    name.text=widget.data['memberinfo']['constructionName'];
     final size =MediaQuery.of(context).size;
     final width =size.width;
     final height =size.height;
@@ -375,7 +374,6 @@ class _demo_Fix extends State<demo_Fix> {
                     icon:
                     Image.asset('assets/images/mainten_create/sent.png'),
                     onPressed: ()  {
-                      //if(checkinput()){sentfix();}
                       sentfix();
                     },
                     iconSize: 100,
@@ -391,14 +389,8 @@ class _demo_Fix extends State<demo_Fix> {
     Alert(
         title: '結果',
         context: context,
-        type: AlertType.success,
-        desc: "成功",
-        buttons: [
-          DialogButton(onPressed: (){
-            Navigator.of(context, rootNavigator: true).pop();
-            Navigator.pop(context,"test");
-          }, child: Text(show))
-        ]
+        type: AlertType.warning,
+        desc: "失敗:"+show,
     ).show();
   }
   _takePhoto() async {
@@ -419,10 +411,10 @@ class _demo_Fix extends State<demo_Fix> {
         var filename = name[name.length - 1];
         List<int> imageBytes = image.readAsBytesSync();
         String base64Image = base64Encode(imageBytes);
-        var re = json.decode(await APIs().uploadimg_no(base64Image, filename));
-        print(re['data']);
+        var re = json.decode(await APIs().uploadimg_project(widget.data['tk'],base64Image, filename));
+        print(re['data']['code'].toString()+"codehere");
         if (img1Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img1id = re['data']['projectFileId'].toString();
             setState(() {
               img1Path = re['data']['projectFileUrl'];
@@ -431,7 +423,7 @@ class _demo_Fix extends State<demo_Fix> {
           }
         }
         else if (img2Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img2id = re['data']['projectFileId'].toString();
             setState(() {
               img2Path = re['data']['projectFileUrl'];
@@ -440,7 +432,7 @@ class _demo_Fix extends State<demo_Fix> {
           }
         }
         else if (img3Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img3id = re['data']['projectFileId'].toString();
             setState(() {
               img3Path = re['data']['projectFileUrl'];
@@ -449,7 +441,7 @@ class _demo_Fix extends State<demo_Fix> {
           }
         }
         else if (img4Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img4id = re['data']['projectFileId'].toString();
             setState(() {
               img4Path = re['data']['projectFileUrl'];
@@ -457,7 +449,7 @@ class _demo_Fix extends State<demo_Fix> {
             });
           }
         } else if (img5Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img5id = re['data']['projectFileId'].toString();
             setState(() {
               img5Path = re['data']['projectFileUrl'];
@@ -494,10 +486,10 @@ class _demo_Fix extends State<demo_Fix> {
         var filename = name[name.length - 1];
         List<int> imageBytes = image.readAsBytesSync();
         String base64Image = base64Encode(imageBytes);
-        var re = json.decode(await APIs().uploadimg_no(base64Image, filename));
+        var re = json.decode(await APIs().uploadimg_project(widget.data['tk'],base64Image, filename));
         print(re);
         if (img1Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img1id = re['data']['projectFileId'].toString();
             setState(() {
               img1Path = re['data']['projectFileUrl'];
@@ -506,7 +498,7 @@ class _demo_Fix extends State<demo_Fix> {
           }
         }
         else if (img2Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img2id = re['data']['projectFileId'].toString();
             setState(() {
               img2Path = re['data']['projectFileUrl'];
@@ -515,7 +507,7 @@ class _demo_Fix extends State<demo_Fix> {
           }
         }
         else if (img3Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img3id = re['data']['projectFileId'].toString();
             setState(() {
               img3Path = re['data']['projectFileUrl'];
@@ -524,7 +516,7 @@ class _demo_Fix extends State<demo_Fix> {
           }
         }
         else if (img4Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img4id = re['data']['projectFileId'].toString();
             setState(() {
               img4Path = re['data']['projectFileUrl'];
@@ -533,7 +525,7 @@ class _demo_Fix extends State<demo_Fix> {
           }
         }
         else if (img5Path == null) {
-          if (re['data']['errors'] == "") {
+          if (re['data']['code'] == 0) {
             img5id = re['data']['projectFileId'].toString();
             setState(() {
               img5Path = re['data']['projectFileUrl'];
@@ -582,114 +574,49 @@ class _demo_Fix extends State<demo_Fix> {
     else {
       var info = Map<String, dynamic>();
       print(name.text);
-      /*info['projectCategoryId'] = Category.toString();
+      info['projectCategoryId'] = Category.toString();
       info['projectItemId'] = Itmes.toString();
-      info['constructionId'] = buildID.toString();
-      info['repairName']=name.text.toString();
-      info['repairPhone']=phone.text.toString();
-      info['repairEmail']=email.text.toString();
-      info['repairAddress']=num.text.toString()  ;
-      info['repairBuilding']=building.text.toString();
-      info['repairHousehold']=household.text.toString();
-      info['repairFloor']=floor.text.toString();
-      info['residentId']=residentID.toString();
+      info['name']=name.text.toString();
+      info['phone']=phone.text.toString();
+      info['mobile']=phone.text.toString();
+      info['email']=email.text.toString();
+      info['address']=num.text.toString()  ;
+      info['building']=""  ;
+      info['household']=household.text.toString();
+      info['floor']=floor.text.toString();
       info['message'] = fix.text.toString();
-      info['clientId'] = widget.data['info']['user_id'];
-      info['repairMobile']=phone.text.toString();
-      info['images'] = [img1id, img2id, img3id, img4id, img5id,];
-      info['files'] = [file1_id];*/
-      showEnd(context, '確認');
+      List<dynamic> images=[];
+      if(img1id!=null)images.add(img1id);
+      if(img2id!=null)images.add(img2id);
+      if(img3id!=null)images.add(img3id);
+      if(img4id!=null)images.add(img4id);
+      if(img5id!=null)images.add(img5id);
+      info['images'] = images;
+      if(file1_id!=null)info['files'] = [file1_id];
+      else info['files'] = [];
 
-      /*var end = json.decode(await APIs().menberfix(widget.data['tk'], info));
-      if (end['data']['errors'] == "") {
-        showEnd(context, '確認');
+
+      var end = json.decode(await APIs().menberfix(widget.data['tk'], info));
+
+      if (end['data']['code'] == 0) {
+        Alert(
+            title: '結果',
+            context: context,
+            type: AlertType.success,
+            desc: "成功",
+            buttons: [
+              DialogButton(onPressed: (){
+                Navigator.of(context, rootNavigator: true).pop();
+                Navigator.pop(context,"test");
+              }, child: Text('確認'))
+            ]
+        ).show();
       }
       else {
-        showEnd(context, end['data']['errors']);
-      }*/
+        showEnd(context, end['data']['message']);
+      }
     }
   }
-  checkinput(){
-    print(buildID);
-    if(name.text==""){
-      Alert(
-        title:'提示',
-        context: context,
-        type: AlertType.warning,
-        desc: "請輸入姓名",
-          buttons: []
-      ).show();
-      return false;
-    }
-    else if(phone.text==""){Alert(
-      title:'提示',
-      context: context,
-      type: AlertType.warning,
-      desc: "請輸入電話",
-        buttons: []
-    ).show();
-    return false;
-    }
-    else if(email.text==''){Alert(
-      title:'提示',
-      context: context,
-      type: AlertType.warning,
-      desc: "請輸入email",
-        buttons: []
-    ).show();
-    return false;
-    }
 
-    else if(buildID==null){Alert(
-      title:'提示',
-      context: context,
-      type: AlertType.warning,
-      desc: "請選擇建案",
-        buttons: []
-    ).show();
-    return false;
-    }
-    else if(num.text==''){Alert(
-      title:'提示',
-      context: context,
-      type: AlertType.warning,
-      desc: "請輸入地址",
-        buttons: []
-    ).show();
-    return false;
-    }
-    else if(Category==null){
-      Alert(
-        title:'提示',
-        context: context,
-        type: AlertType.warning,
-        desc: "請選擇維修類別",
-          buttons: []
-      ).show();
-      return false;
-    }
-    else if(Itmes==null){
-      Alert(
-          title:'提示',
-          context: context,
-          type: AlertType.warning,
-          desc: "請選擇維修項目",
-          buttons: []
-      ).show();
-      return false;
-    }
-    else if(fix.text==''){
-      Alert(
-        title:'提示',
-        context: context,
-        type: AlertType.warning,
-        desc: "請輸入狀況說明",
-          buttons: []
-      ).show();
-      return false;
-    }
-    else{return true;}
-
-  }
 
 }

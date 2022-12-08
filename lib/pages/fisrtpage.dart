@@ -62,7 +62,7 @@ class _firstpage extends State<firstpage> {
                       MaterialPageRoute(builder: (context) => adminLogin()));
                 }
             ),
-            const Text('reddotDemoV1.1'),
+            const Text('reddotDemoV1.2'),
             Container(
                 padding:EdgeInsetsDirectional.zero ,
                 width:width-20,
