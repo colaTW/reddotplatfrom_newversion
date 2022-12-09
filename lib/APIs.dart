@@ -332,7 +332,7 @@ class APIs {
   }
 
   getbanner()async{
-    var uri = Uri.https(url,'/api/v1/home/banner/list',);
+    var uri = Uri.https('baotai.edwardforce.tw','/api/v1/home/banner/list',);
     var client = http.Client();
     var response = await client.get(uri,);
     // print(response.body);
