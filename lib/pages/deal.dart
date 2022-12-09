@@ -360,17 +360,11 @@ class _deal extends State<deal> {
         else {
           info['price'] = await APIs().read_string('price');
         }
-
+        info['images'] =await getimglist();
         info['handlerType'] = await (APIs().read('how'));
         info['handlerUserId'] = widget.data['ID'].toString();
-        var images=[];
-        if(await (APIs().read_string('img1_id'))!="")images.add(APIs().read_string('img1_id'));
-        if(await (APIs().read_string('img2_id'))!="")images.add(APIs().read_string('img2_id'));
-        if(await (APIs().read_string('img3_id'))!="")images.add(APIs().read_string('img3_id'));
-        if(await (APIs().read_string('img4_id'))!="")images.add(APIs().read_string('img4_id'));
-        if(await (APIs().read_string('img5_id'))!="")images.add(APIs().read_string('img5_id'));
 
-        info['images'] = images;
+
         var file = [];
         for (var i = 0; i < deal.filelist.length; i++) {
           if ((i % 2) == 0) {
@@ -381,7 +375,7 @@ class _deal extends State<deal> {
         print(info.toString());
 
         var end = json.decode(await APIs().newdeal(widget.data['tk'], info));
-        if (end['data']['code'] == 0) {
+        if (end['code'] == 0) {
           final prefs = await SharedPreferences.getInstance();
           prefs.remove('how');
           prefs.remove('img1');
@@ -410,7 +404,7 @@ class _deal extends State<deal> {
               ]
           ).show();
         } else {
-          showEnd(context, end['data']['message']);
+          showEnd(context, end['message']);
         }
       }
     }
@@ -462,8 +456,8 @@ class _deal extends State<deal> {
                 var re = json.decode(
                     await APIs().uploadfile_handler(
                         widget.data['tk'], filename,filetype, base64file));
-                if (re['data']['code'] == 0) {
-                  file1_id = re['data']['handlerFileId'].toString();
+                if (re['code'] == 0) {
+                  file1_id = re['handlerFileId'].toString();
                   _filepath = filename;
                   await deal.filelist.add(file1_id);
                   await deal.filelist.add(_filepath);
@@ -481,7 +475,7 @@ class _deal extends State<deal> {
                     context: context,
                     type: AlertType.warning,
                     title: "提示",
-                    desc: re['data']['message'],
+                    desc: re['message'],
                     buttons: [
                     ],
                   ).show();
@@ -514,5 +508,15 @@ class _deal extends State<deal> {
         });
       }
     }
+  }
+  getimglist() async{
+    var images=[];
+
+    if( (await APIs().read_string('img1_id'))!="")images.add(await APIs().read_string('img1_id'));
+    if( (await APIs().read_string('img2_id'))!="")images.add(await APIs().read_string('img2_id'));
+    if( (await APIs().read_string('img3_id'))!="")images.add(await APIs().read_string('img3_id'));
+    if( (await APIs().read_string('img4_id'))!="")images.add(await APIs().read_string('img4_id'));
+    if( (await APIs().read_string('img5_id'))!="")images.add(await APIs().read_string('img5_id'));
+    return images;
   }
 }

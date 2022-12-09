@@ -197,45 +197,45 @@ class _deal_img extends State<deal_img> {
         String base64Image = base64Encode(imageBytes);
         var re = json.decode(await APIs().uploadimg_handler(widget.data['tk'],base64Image,filename));
         if (img1Path == '') {
-          if (re['data']['code'] == 0) {
-            img1id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img1id = re['handlerFileId'].toString();
             setState(() {
-              img1Path = re['data']['handlerFileUrl'];
+              img1Path = re['handlerFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
         }
         else if (img2Path == '') {
-          if (re['data']['code'] == 0) {
-            img2id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img2id = re['handlerFileId'].toString();
             setState(() {
-              img2Path = re['data']['handlerFileUrl'];
+              img2Path = re['handlerFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
         }
         else if (img3Path == '') {
-          if (re['data']['code'] == 0) {
-            img3id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img3id = re['handlerFileId'].toString();
             setState(() {
-              img3Path = re['data']['handlerFileUrl'];
+              img3Path = re['handlerFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
         }
         else if (img4Path == '') {
-          if (re['data']['code'] == 0) {
-            img4id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img4id = re['handlerFileId'].toString();
             setState(() {
-              img4Path = re['data']['handlerFileUrl'];
+              img4Path = re['handlerFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
         } else if (img5Path == '') {
-          if (re['data']['code'] == 0) {
-            img5id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img5id = re['handlerFileId'].toString();
             setState(() {
-              img5Path = re['data']['handlerFileUrl'];
+              img5Path = re['handlerFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
@@ -271,46 +271,46 @@ class _deal_img extends State<deal_img> {
         var re = json.decode(await APIs().uploadimg_handler(widget.data['tk'],base64Image, filename));
 
         if (img1Path == '') {
-          if (re['data']['code'] == 0) {
-            img1id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img1id = re['handlerFileId'].toString();
             setState(() {
-              img1Path = re['data']['handlerFileUrl'];
+              img1Path = re['handlerFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
         }
         else if (img2Path == '') {
-          if (re['data']['code'] == 0) {
-            img2id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img2id = re['handlerFileId'].toString();
             setState(() {
-              img2Path = re['data']['handlerFileUrl'];
+              img2Path = re['handlerFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
         }
         else if (img3Path == '') {
-          if (re['data']['code'] == 0) {
-            img3id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img3id = re['handlerFileId'].toString();
             setState(() {
-              img3Path = re['data']['handlerFileUrl'];
+              img3Path = re['handlerFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
         }
         else if (img4Path =='') {
-          if (re['data']['code'] == 0) {
-            img4id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img4id = re['handlerFileId'].toString();
             setState(() {
-              img4Path = re['data']['handlerFileUrl'];
+              img4Path = re['handlerFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
         }
         else if (img5Path == '') {
-          if (re['data']['code'] == 0) {
-            img5id = re['data']['handlerFileId'].toString();
+          if (re['code'] == 0) {
+            img5id = re['handlerFileId'].toString();
             setState(() {
-              img5Path = re['data']['handlerFileUrl'];
+              img5Path = re['handlerFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }

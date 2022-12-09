@@ -412,47 +412,46 @@ class _member_newFix extends State<member_newFix> {
         List<int> imageBytes = image.readAsBytesSync();
         String base64Image = base64Encode(imageBytes);
         var re = json.decode(await APIs().uploadimg_project(widget.data['tk'],base64Image, filename));
-        print(re['data']['code'].toString()+"codehere");
         if (img1Path == null) {
-          if (re['data']['code'] == 0) {
-            img1id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img1id = re['projectFileId'].toString();
             setState(() {
-              img1Path = re['data']['projectFileUrl'];
+              img1Path = re['projectFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
         }
         else if (img2Path == null) {
-          if (re['data']['code'] == 0) {
-            img2id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img2id = re['projectFileId'].toString();
             setState(() {
-              img2Path = re['data']['projectFileUrl'];
+              img2Path = re['projectFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
         }
         else if (img3Path == null) {
-          if (re['data']['code'] == 0) {
-            img3id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img3id = re['projectFileId'].toString();
             setState(() {
-              img3Path = re['data']['projectFileUrl'];
+              img3Path = re['projectFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
         }
         else if (img4Path == null) {
-          if (re['data']['code'] == 0) {
-            img4id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img4id = re['projectFileId'].toString();
             setState(() {
-              img4Path = re['data']['projectFileUrl'];
+              img4Path = re['projectFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
         } else if (img5Path == null) {
-          if (re['data']['code'] == 0) {
-            img5id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img5id = re['projectFileId'].toString();
             setState(() {
-              img5Path = re['data']['projectFileUrl'];
+              img5Path = re['projectFileUrl'];
               camera = 'assets/images/mainten_create/cream.png';
             });
           }
@@ -489,46 +488,46 @@ class _member_newFix extends State<member_newFix> {
         var re = json.decode(await APIs().uploadimg_project(widget.data['tk'],base64Image, filename));
         print(re);
         if (img1Path == null) {
-          if (re['data']['code'] == 0) {
-            img1id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img1id = re['projectFileId'].toString();
             setState(() {
-              img1Path = re['data']['projectFileUrl'];
+              img1Path = re['projectFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
         }
         else if (img2Path == null) {
-          if (re['data']['code'] == 0) {
-            img2id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img2id = re['projectFileId'].toString();
             setState(() {
-              img2Path = re['data']['projectFileUrl'];
+              img2Path = re['projectFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
         }
         else if (img3Path == null) {
-          if (re['data']['code'] == 0) {
-            img3id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img3id = re['projectFileId'].toString();
             setState(() {
-              img3Path = re['data']['projectFileUrl'];
+              img3Path = re['projectFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
         }
         else if (img4Path == null) {
-          if (re['data']['code'] == 0) {
-            img4id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img4id = re['projectFileId'].toString();
             setState(() {
-              img4Path = re['data']['projectFileUrl'];
+              img4Path = re['projectFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
         }
         else if (img5Path == null) {
-          if (re['data']['code'] == 0) {
-            img5id = re['data']['projectFileId'].toString();
+          if (re['code'] == 0) {
+            img5id = re['projectFileId'].toString();
             setState(() {
-              img5Path = re['data']['projectFileUrl'];
+              img5Path = re['projectFileUrl'];
               upfile = 'assets/images/mainten_create/flieupload.png';
             });
           }
@@ -598,7 +597,7 @@ class _member_newFix extends State<member_newFix> {
 
       var end = json.decode(await APIs().menberfix(widget.data['tk'], info));
 
-      if (end['data']['code'] == 0) {
+      if (end['code'] == 0) {
         Alert(
             title: '結果',
             context: context,
@@ -613,7 +612,7 @@ class _member_newFix extends State<member_newFix> {
         ).show();
       }
       else {
-        showEnd(context, end['data']['message']);
+        showEnd(context, end['message']);
       }
     }
   }
