@@ -210,7 +210,7 @@ class _deal extends State<deal> {
                                 });
                               },
                             )),
-                        Text("觀察中",style: TextStyle(color: Colors.white),),
+                        Text("維修處理完畢",style: TextStyle(color: Colors.white),),
                       ],
                     ),
                    // Row(

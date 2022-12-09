@@ -238,13 +238,14 @@ class _Employee extends State<Employee>{
   }
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
     final width = size.width;
     final height = size.height;
-      return MaterialApp(
-        title: "resr",
-        home: Scaffold(
+      return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Color(0xFF445154),
+            title: Text("維修列表"),
+          ),
           body:
           Container(
             height: height+1,
@@ -420,8 +421,8 @@ class _Employee extends State<Employee>{
           ),
           ),
 
-        ),
-      );
+        );
+
 
   }
   bool dataNotification(ScrollNotification notification) {
