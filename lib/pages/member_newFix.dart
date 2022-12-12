@@ -19,8 +19,10 @@ class member_newFix extends StatefulWidget {
   }
 }
 class _member_newFix extends State<member_newFix> {
+  TextEditingController buildname = TextEditingController();
   TextEditingController name = TextEditingController();
   TextEditingController phone = TextEditingController();
+  TextEditingController address = TextEditingController();
   TextEditingController cases = TextEditingController();
   TextEditingController num = TextEditingController();
   TextEditingController floor = TextEditingController();
@@ -51,7 +53,7 @@ class _member_newFix extends State<member_newFix> {
 
   @override
   Widget build(BuildContext context) {
-    name.text=widget.data['memberinfo']['constructionName'];
+    buildname.text=widget.data['memberinfo']['constructionName'];
     final size =MediaQuery.of(context).size;
     final width =size.width;
     final height =size.height;
@@ -83,7 +85,7 @@ class _member_newFix extends State<member_newFix> {
                     ),
                     Expanded(
                       child: TextFormField(
-                        controller: name,
+                        controller: buildname,
                         decoration: const InputDecoration(
                         ),
                       ),
@@ -99,7 +101,7 @@ class _member_newFix extends State<member_newFix> {
                     ),
                     Expanded(
                       child: TextFormField(
-                        controller: phone,
+                        controller: name,
                         decoration: const InputDecoration(
 
                         ),
@@ -117,7 +119,7 @@ class _member_newFix extends State<member_newFix> {
                     ),
                     Expanded(
                       child: TextFormField(
-                        controller: email,
+                        controller: phone,
                         decoration: const InputDecoration(
                         ),
                       ),
@@ -185,7 +187,7 @@ class _member_newFix extends State<member_newFix> {
                     ),
                     Expanded(
                       child: TextFormField(
-                        controller: num,
+                        controller: address,
                         decoration: const InputDecoration(
                           fillColor: Colors.white,
                           filled: true,
@@ -579,7 +581,7 @@ class _member_newFix extends State<member_newFix> {
       info['phone']=phone.text.toString();
       info['mobile']=phone.text.toString();
       info['email']=email.text.toString();
-      info['address']=num.text.toString()  ;
+      info['address']=address.text.toString()  ;
       info['building']=""  ;
       info['household']=household.text.toString();
       info['floor']=floor.text.toString();
